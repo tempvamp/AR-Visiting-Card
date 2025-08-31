@@ -1,5 +1,5 @@
 (async () => {
-  // 1) Request camera permission immediately
+  // 1) Request camera permission
   try {
     await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
   } catch (err) {
