@@ -9,10 +9,9 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <!-- Full-screen AR scene -->
   <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-    <!-- Use your QR code .patt as the marker -->
-    <a-marker type="pattern" url="assets/qr-code.patt" id="marker">
+    <!-- Rotate marker content –90° on X so it appears upright -->
+    <a-marker type="pattern" url="assets/qr-code.patt" rotation="-90 0 0" id="marker">
       <a-text id="text-asset"
         value="Ashish M. Muley\nInstrumentation Engineer"
         position="0 1.5 0"
@@ -48,7 +47,6 @@
     </a-marker>
     <a-entity camera></a-entity>
   </a-scene>
-
   <script src="app.js"></script>
 </body>
 </html>
