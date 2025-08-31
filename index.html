@@ -1,120 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>AR Business Card</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Advanced AR Business Card</title>
 
-  <!-- A-Frame and AR.js -->
-  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  <!-- A-Frame & AR.js -->
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
+  
+  <!-- Gesture Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/aframe-gesture-detector@3.0.2/dist/aframe-gesture-detector.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-super-hands@4.0.2/dist/aframe-super-hands.min.js"></script>
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css"/>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- AR Scene -->
-  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+  <a-scene
+    embedded
+    vr-mode-ui="enabled: false"
+    renderer="logarithmicDepthBuffer: true;"
+    arjs="sourceType: webcam; debugUIEnabled: false;"
+  >
+    <!-- QR marker -->
     <a-marker type="pattern" url="assets/qr-code.patt" id="marker">
 
-      <!-- Profile Photo left -->
-      <a-image id="photo-asset"
-        src="assets/profile.jpg"
-        position="-1.8 0.3 0"
+      <!-- Name: floating above -->
+      <a-entity
+        id="name-entity"
+        position="0 1.6 0"
+        gesture-detector
+        super-hands
+        rotation="0 0 0"
+      >
+        <a-text
+          value="Ashish M. Muley\nInstrumentation Engineer"
+          align="center"
+          color="#00DFFF"
+          width="3"
+          position="0 0 0"
+          scale="1 1 1"
+          class="draggable scalable rotatable"
+        ></a-text>
+      </a-entity>
+
+      <!-- Video: left side -->
+      <a-entity
+        id="video-entity"
+        position="-1.6 0.4 0"
+        gesture-detector
+        super-hands
+        rotation="0 0 0"
+      >
+        <a-video
+          id="video-asset"
+          src="#demoVideo"
+          width="1.2"
+          height="0.7"
+          autoplay="true"
+          loop="true"
+          muted="true"
+          class="draggable scalable rotatable"
+          position="0 0 0"
+        ></a-video>
+      </a-entity>
+
+      <!-- Logo: right side -->
+      <a-entity
+        id="logo-entity"
+        position="1.6 0.4 0"
+        gesture-detector
+        super-hands
+        rotation="0 0 0"
+      >
+        <a-image
+          id="logo-asset"
+          src="assets/logo.png"
+          width="1"
+          height="1"
+          class="draggable scalable rotatable"
+          position="0 0 0"
+        ></a-image>
+      </a-entity>
+
+      <!-- Profile Photo: bottom center -->
+      <a-entity
+        id="photo-entity"
+        position="0 -1.1 0"
+        gesture-detector
+        super-hands
+        rotation="0 0 0"
+      >
+        <a-image
+          id="photo-asset"
+          src="assets/profile.jpg"
+          width="1.2"
+          height="1.2"
+          class="draggable scalable rotatable"
+          position="0 0 0"
+        ></a-image>
+      </a-entity>
+
+      <!-- Hidden plain black plane at origin for click detection -->
+      <a-plane
+        position="0 0 0"
+        rotation="-90 0 0"
         width="1"
         height="1"
-        visible="false"
-        class="clickable">
-      </a-image>
-
-      <!-- Text (Name and Title) above -->
-      <a-text id="text-asset"
-        value="Ashish M. Muley\nInstrumentation Engineer"
-        position="0 1.4 0"
-        align="center"
-        color="#00D4FF"
-        width="4"
-        visible="false">
-      </a-text>
-
-      <!-- Resume Preview box right -->
-      <a-plane id="resume-preview"
-        position="1.7 0.3 0"
-        rotation="0 0 0"
-        width="2.2"
-        height="1.5"
         color="#000"
-        visible="false"
-        material="shader: flat; src: assets/resume-preview.jpg"
-        class="clickable">
-      </a-plane>
-
-      <!-- Resume button below resume preview -->
-      <a-box id="resume-button"
-        position="1.7 -0.7 0"
-        width="1.2"
-        height="0.3"
-        depth="0.1"
-        color="#FF6B6B"
-        visible="false"
-        class="clickable">
-        <a-text value="📄 Download Resume"
-          position="0 0 0.06"
-          align="center"
-          color="#fff"
-          width="4">
-        </a-text>
-      </a-box>
-
-      <!-- Contact buttons under name -->
-      <a-cylinder id="linkedin-btn"
-        position="-0.9 0.7 0"
-        radius="0.15"
-        height="0.1"
-        color="#0077B5"
-        visible="false"
-        class="clickable">
-        <a-text value="LinkedIn"
-          position="0 0 0.06"
-          align="center"
-          color="#fff"
-          width="2.5">
-        </a-text>
-      </a-cylinder>
-      <a-cylinder id="whatsapp-btn"
-        position="0 0.7 0"
-        radius="0.15"
-        height="0.1"
-        color="#25D366"
-        visible="false"
-        class="clickable">
-        <a-text value="WhatsApp"
-          position="0 0 0.06"
-          align="center"
-          color="#fff"
-          width="2.5">
-        </a-text>
-      </a-cylinder>
-      <a-cylinder id="email-btn"
-        position="0.95 0.7 0"
-        radius="0.15"
-        height="0.1"
-        color="#EA4335"
-        visible="false"
-        class="clickable">
-        <a-text value="Email"
-          position="0 0 0.06"
-          align="center"
-          color="#fff"
-          width="2.5">
-        </a-text>
-      </a-cylinder>
-
+        opacity="0"
+      ></a-plane>
     </a-marker>
+
+    <!-- Assets -->
+    <a-assets>
+      <video
+        id="demoVideo"
+        src="assets/demo.mp4"
+        preload="auto"
+        loop
+        crossorigin="anonymous"
+        webkit-playsinline
+      ></video>
+    </a-assets>
 
     <a-entity camera></a-entity>
   </a-scene>
 
+  <!-- Main JS -->
   <script src="app.js"></script>
 </body>
 </html>
