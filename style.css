@@ -1,4 +1,3 @@
-/* Full-screen AR scene */
 html, body { margin:0; padding:0; overflow:hidden; width:100%; height:100%; }
 a-scene { position:fixed; top:0; left:0; width:100vw; height:100vh; }
 
@@ -8,6 +7,4 @@ a-scene { position:fixed; top:0; left:0; width:100vw; height:100vh; }
   60% { transform: scale(1.1); opacity:1; }
   100% { transform: scale(1); }
 }
-.pop-in {
-  animation: popIn 0.6s ease-out forwards;
-}
+.pop-in { animation: popIn 0.6s ease-out forwards; }
