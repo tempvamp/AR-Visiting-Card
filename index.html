@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Business Card - Interactive Experience</title>
+    <meta name="description" content="Interactive AR business card - Point your camera at the marker to experience augmented reality">
+
+    <!-- AR.js and A-Frame -->
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.7/aframe/build/aframe-ar.js"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2>Initializing AR Experience</h2>
+            <p>Please allow camera access to view the AR business card</p>
+            <div class="loading-progress">
+                <div class="loading-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions Overlay -->
+    <div id="instructions-overlay" class="instructions-overlay hidden">
+        <div class="instructions-content">
+            <h3>🎯 How to Use Your AR Business Card</h3>
+            <div class="instruction-steps">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <p>Point your camera at the AR marker</p>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <p>Keep the marker steady and well-lit</p>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <p>Tap on AR elements to interact</p>
+                </div>
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <p>Use contact panel below for quick actions</p>
+      

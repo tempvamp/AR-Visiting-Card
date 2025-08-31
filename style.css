@@ -1,0 +1,642 @@
+/* ============================================
+   AR BUSINESS CARD - COMPLETE STYLING
+   ============================================ */
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+    color: #ffffff;
+    overflow: hidden;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* AR Scene Styles */
+a-scene {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* ============================================
+   LOADING SCREEN
+   ============================================ */
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.5s ease-out;
+}
+
+.loading-content {
+    text-align: center;
+    max-width: 400px;
+    padding: 2rem;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid #333;
+    border-top: 4px solid #00D4FF;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 2rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-content h2 {
+    color: #00D4FF;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.loading-content p {
+    color: #cccccc;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.loading-progress {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.loading-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #00D4FF, #FF6B6B);
+    border-radius: 2px;
+    animation: loadingProgress 3s ease-in-out infinite;
+}
+
+@keyframes loadingProgress {
+    0% { width: 0%; }
+    50% { width: 70%; }
+    100% { width: 100%; }
+}
+
+/* ============================================
+   INSTRUCTIONS OVERLAY
+   ============================================ */
+
+.instructions-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    transition: opacity 0.3s ease-out;
+}
+
+.instructions-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.instructions-content {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    padding: 2.5rem;
+    border-radius: 20px;
+    max-width: 450px;
+    margin: 1rem;
+    border: 2px solid #00D4FF;
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+}
+
+.instructions-content h3 {
+    color: #00D4FF;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.instruction-steps {
+    margin-bottom: 2rem;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border-left: 3px solid #00D4FF;
+}
+
+.step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background: #00D4FF;
+    color: #000;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.step p {
+    color: #cccccc;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.btn {
+    background: linear-gradient(135deg, #00D4FF 0%, #0099CC 100%);
+    color: #000;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 212, 255, 0.5);
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF5252 100%);
+}
+
+.btn--primary {
+    width: 100%;
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF5252 100%);
+    color: white;
+}
+
+.btn--primary:hover {
+    background: linear-gradient(135deg, #00D4FF 0%, #0099CC 100%);
+    color: #000;
+}
+
+/* ============================================
+   MARKER DETECTION MESSAGE
+   ============================================ */
+
+.marker-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    z-index: 500;
+    border: 2px solid #FF6B6B;
+    box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+    max-width: 350px;
+    margin: 1rem;
+}
+
+.marker-message.hidden {
+    display: none;
+}
+
+.marker-message h3 {
+    color: #FF6B6B;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.marker-message p {
+    color: #cccccc;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.marker-hint {
+    margin-top: 1rem;
+}
+
+.marker-preview {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #00D4FF;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.marker-hint p {
+    font-size: 0.9rem;
+    color: #00D4FF;
+    margin: 0;
+}
+
+/* ============================================
+   CONTACT PANEL
+   ============================================ */
+
+.contact-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+    backdrop-filter: blur(20px);
+    border-top: 2px solid #00D4FF;
+    z-index: 600;
+    padding: 1rem;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.contact-header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.contact-header h3 {
+    color: #00D4FF;
+    font-size: 1.2rem;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+}
+
+.contact-header p {
+    color: #cccccc;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.contact-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.contact-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.8rem 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.contact-btn:hover::before {
+    left: 100%;
+}
+
+.contact-btn:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #00D4FF;
+    box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+}
+
+.contact-btn .icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
+    display: block;
+}
+
+.contact-btn .text {
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Contact Button Specific Colors */
+.contact-btn.email:hover {
+    border-color: #FF6B6B;
+    box-shadow: 0 5px 20px rgba(255, 107, 107, 0.3);
+}
+
+.contact-btn.phone:hover {
+    border-color: #4ECDC4;
+    box-shadow: 0 5px 20px rgba(78, 205, 196, 0.3);
+}
+
+.contact-btn.linkedin:hover {
+    border-color: #0077B5;
+    box-shadow: 0 5px 20px rgba(0, 119, 181, 0.3);
+}
+
+.contact-btn.instagram:hover {
+    border-color: #E4405F;
+    box-shadow: 0 5px 20px rgba(228, 64, 95, 0.3);
+}
+
+.contact-btn.github:hover {
+    border-color: #333;
+    box-shadow: 0 5px 20px rgba(51, 51, 51, 0.3);
+}
+
+.contact-btn.resume:hover {
+    border-color: #9B59B6;
+    box-shadow: 0 5px 20px rgba(155, 89, 182, 0.3);
+}
+
+.contact-footer {
+    text-align: center;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.contact-footer p {
+    color: #888;
+    font-size: 0.7rem;
+    margin: 0;
+}
+
+/* ============================================
+   ERROR MESSAGE
+   ============================================ */
+
+.error-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 0, 0, 0.9);
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    z-index: 1001;
+    border: 2px solid #FF6B6B;
+    box-shadow: 0 10px 30px rgba(255, 107, 107, 0.5);
+    max-width: 350px;
+    margin: 1rem;
+}
+
+.error-message.hidden {
+    display: none;
+}
+
+.error-content h3 {
+    color: white;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.error-content p {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.hidden {
+    display: none !important;
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.fade-out {
+    animation: fadeOut 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+/* Mobile Portrait */
+@media (max-width: 480px) {
+    .instructions-content {
+        padding: 1.5rem;
+        margin: 0.5rem;
+    }
+
+    .contact-buttons {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+    }
+
+    .contact-btn {
+        padding: 0.6rem 0.3rem;
+    }
+
+    .contact-btn .icon {
+        font-size: 1.3rem;
+    }
+
+    .contact-btn .text {
+        font-size: 0.7rem;
+    }
+
+    .marker-message {
+        padding: 1.5rem;
+        margin: 0.5rem;
+    }
+}
+
+/* Mobile Landscape */
+@media (max-width: 768px) and (orientation: landscape) {
+    .contact-panel {
+        padding: 0.8rem;
+    }
+
+    .contact-buttons {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 0.5rem;
+    }
+
+    .instructions-content {
+        max-width: 600px;
+        padding: 2rem;
+    }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .contact-panel {
+        max-width: 600px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 20px 20px 0 0;
+    }
+
+    .contact-buttons {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 1rem;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .contact-panel {
+        max-width: 800px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 20px 20px 0 0;
+    }
+
+    .contact-buttons {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 1.2rem;
+    }
+
+    .contact-btn {
+        padding: 1rem 0.8rem;
+    }
+
+    .contact-btn .icon {
+        font-size: 1.8rem;
+    }
+
+    .contact-btn .text {
+        font-size: 0.9rem;
+    }
+}
+
+/* ============================================
+   AR SPECIFIC ANIMATIONS
+   ============================================ */
+
+/* Pulse effect for interactive elements */
+.ar-pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Glow effect for AR elements */
+.ar-glow {
+    filter: drop-shadow(0 0 10px #00D4FF);
+}
+
+/* Floating animation */
+.ar-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+/* Focus styles for keyboard navigation */
+.contact-btn:focus,
+.btn:focus {
+    outline: 2px solid #00D4FF;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .contact-btn {
+        border: 2px solid #ffffff;
+    }
+
+    .btn {
+        border: 2px solid #000000;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+    .contact-panel,
+    .loading-screen,
+    .instructions-overlay,
+    .marker-message,
+    .error-message {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+        color: black !important;
+    }
+}
