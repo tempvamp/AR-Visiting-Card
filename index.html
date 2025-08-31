@@ -9,11 +9,10 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <!-- AR Scene -->
+  <!-- Full-screen AR scene -->
   <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-    <!-- Use your QR code pattern as AR marker -->
+    <!-- Use your QR code .patt as the marker -->
     <a-marker type="pattern" url="assets/qr-code.patt" id="marker">
-      <!-- Pop-in assets -->
       <a-text id="text-asset"
         value="Ashish M. Muley\nInstrumentation Engineer"
         position="0 1.5 0"
@@ -49,17 +48,6 @@
     </a-marker>
     <a-entity camera></a-entity>
   </a-scene>
-
-  <!-- On-screen marker preview uses your QR code PNG -->
-  <div id="marker-message" class="marker-message">
-    <div class="marker-content">
-      <h3>🔍 AR Marker</h3>
-      <p>Point your camera at this code</p>
-      <div class="marker-preview">
-        <img src="assets/qr-code.png" alt="Your QR Code Marker" class="marker-img"/>
-      </div>
-    </div>
-  </div>
 
   <script src="app.js"></script>
 </body>
