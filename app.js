@@ -1,42 +1,65 @@
 (async () => {
+  // Request camera permission
   try {
     await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-  } catch (err) {
-    alert('⚠️ Please allow camera access and refresh.');
+  } catch (error) {
+    alert('🚨 Camera access is required. Please allow and reload.');
     return;
   }
 
   const marker = document.getElementById('marker');
+
   marker.addEventListener('markerFound', () => {
-    const assets = [
-      'text-asset',
-      'photo-asset',
-      'resume-preview',
-      'resume-button',
-      'linkedin-btn',
-      'whatsapp-btn',
-      'email-btn'
+    const sequence = [
+      'name-entity',
+      'video-entity',
+      'logo-entity',
+      'photo-entity',
     ];
-    assets.forEach((id, i) => {
+
+    sequence.forEach((id, i) => {
       const el = document.getElementById(id);
       setTimeout(() => {
         el.setAttribute('visible', 'true');
         el.classList.add('pop-in');
-      }, i * 800 + 400); // staggered reveal
+      }, i * 1200 + 500);
     });
 
-    // Setup clickable handlers
-    document.getElementById('resume-button').addEventListener('click', () => {
-      window.open('assets/resume.pdf', '_blank');
-    });
-    document.getElementById('linkedin-btn').addEventListener('click', () => {
+    // Enable video playback on some mobile devices (manual play requirement)
+    const videoEl = document.querySelector('#video-asset');
+    if (videoEl) {
+      videoEl.play().catch(() => {
+        console.log('⚠️ Unable to autoplay video; user interaction required.');
+      });
+    }
+
+    // Add clickable behavior to open links (optional)
+    setupClickableLinks();
+  });
+
+  function setupClickableLinks() {
+    // Name click opens LinkedIn
+    const nameEntity = document.getElementById('name-entity');
+    nameEntity.addEventListener('click', () => {
       window.open('https://linkedin.com/in/ashishmuley', '_blank');
     });
-    document.getElementById('whatsapp-btn').addEventListener('click', () => {
-      window.open('https://wa.me/919876543210?text=Hello%20Ashish!', '_blank');
+
+    // Logo click opens company website
+    const logoEntity = document.getElementById('logo-entity');
+    logoEntity.addEventListener('click', () => {
+      window.open('https://mtes.com', '_blank');
     });
-    document.getElementById('email-btn').addEventListener('click', () => {
-      window.open('mailto:ashish.muley@mtes.in', '_blank');
+
+    // Profile photo click downloads resume
+    const photoEntity = document.getElementById('photo-entity');
+    photoEntity.addEventListener('click', () => {
+      window.open('assets/resume.pdf', '_blank');
     });
-  });
+
+    // Video click opens portfolio (example)
+    const videoEntity = document.getElementById('video-entity');
+    videoEntity.addEventListener('click', () => {
+      window.open('https://ashishmuley.com', '_blank');
+    });
+  }
 })();
