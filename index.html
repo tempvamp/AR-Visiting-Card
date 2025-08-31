@@ -3,37 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR Business Card - Interactive Experience</title>
-    <meta name="description" content="Interactive AR business card - Point your camera at the marker to experience augmented reality">
-
+    <title>AR Business Card - Ashish Muley</title>
+    <meta name="description" content="Interactive AR business card - Scan QR code or point camera at marker">
+    
     <!-- AR.js and A-Frame -->
-    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.7/aframe/build/aframe-ar.js"></script>
-
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
+    
     <!-- Custom Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- QR Code Section -->
+    <div id="qr-section" class="qr-section">
+        <div class="qr-content">
+            <h1>🚀 AR Business Card</h1>
+            <p>Ashish Machhindra Muley</p>
+            <p class="subtitle">Instrumentation Engineer</p>
+            
+            <div class="qr-container">
+                <div id="qr-code" class="qr-code">
+                    <div class="qr-placeholder">
+                        <div class="qr-grid">
+                            <div class="qr-dot"></div><div class="qr-dot"></div><div class="qr-dot"></div><div class="qr-dot"></div><div class="qr-dot"></div>
+                            <div class="qr-dot"></div><div class="qr-dot dark"></div><div class="qr-dot dark"></div><div class="qr-dot dark"></div><div class="qr-dot"></div>
+                            <div class="qr-dot"></div><div class="qr-dot dark"></div><div class="qr-dot"></div><div class="qr-dot dark"></div><div class="qr-dot"></div>
+                            <div class="qr-dot"></div><div class="qr-dot dark"></div><div class="qr-dot dark"></div><div class="qr-dot dark"></div><div class="qr-dot"></div>
+                            <div class="qr-dot"></div><div class="qr-dot"></div><div class="qr-dot"></div><div class="qr-dot"></div><div class="qr-dot"></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="qr-text">Scan QR Code or use AR Marker</p>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="start-ar-btn" class="btn btn-primary">📱 Start AR Experience</button>
+                <button id="download-marker-btn" class="btn btn-secondary">📥 Download AR Marker</button>
+            </div>
+            
+            <div class="info-cards">
+                <div class="info-card">
+                    <h3>📧 Contact</h3>
+                    <p>ashish.muley@mtes.in</p>
+                    <p>+91-9876543210</p>
+                </div>
+                <div class="info-card">
+                    <h3>🔗 Connect</h3>
+                    <p>LinkedIn: /in/ashishmuley</p>
+                    <p>GitHub: /tempvamp</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Loading Screen -->
-    <div id="loading-screen" class="loading-screen">
+    <div id="loading-screen" class="loading-screen hidden">
         <div class="loading-content">
             <div class="loading-spinner"></div>
-            <h2>Initializing AR Experience</h2>
-            <p>Please allow camera access to view the AR business card</p>
+            <h2>Starting AR Experience</h2>
+            <p>Please allow camera access when prompted</p>
             <div class="loading-progress">
                 <div class="loading-bar"></div>
             </div>
+            <button id="skip-loading" class="btn btn-secondary">Skip to AR</button>
         </div>
     </div>
 
     <!-- Instructions Overlay -->
     <div id="instructions-overlay" class="instructions-overlay hidden">
         <div class="instructions-content">
-            <h3>🎯 How to Use Your AR Business Card</h3>
+            <h3>🎯 How to Use AR Business Card</h3>
             <div class="instruction-steps">
                 <div class="step">
                     <span class="step-number">1</span>
-                    <p>Point your camera at the AR marker</p>
+                    <p>Point your camera at the Hiro marker</p>
                 </div>
                 <div class="step">
                     <span class="step-number">2</span>
@@ -41,9 +84,176 @@
                 </div>
                 <div class="step">
                     <span class="step-number">3</span>
-                    <p>Tap on AR elements to interact</p>
+                    <p>Tap AR elements to interact</p>
                 </div>
-                <div class="step">
-                    <span class="step-number">4</span>
-                    <p>Use contact panel below for quick actions</p>
-      
+            </div>
+            <button id="got-it-btn" class="btn btn-primary">Got it! Start AR</button>
+        </div>
+    </div>
+
+    <!-- AR Scene -->
+    <a-scene 
+        id="ar-scene"
+        embedded 
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        vr-mode-ui="enabled: false"
+        class="hidden">
+        
+        <!-- AR Marker -->
+        <a-marker id="main-marker" preset="hiro" smooth="true" smoothCount="10" smoothTolerance="0.01">
+            <!-- Profile Text -->
+            <a-text 
+                id="profile-text"
+                value="Ashish Machhindra Muley&#10;Instrumentation Engineer&#10;MTES Pvt. Ltd."
+                position="0 1.5 0"
+                align="center"
+                color="#00D4FF"
+                width="6">
+            </a-text>
+
+            <!-- Profile Image Placeholder -->
+            <a-box 
+                id="profile-placeholder"
+                position="-1.5 0.5 0"
+                width="1"
+                height="1"
+                depth="0.1"
+                color="#4CAF50"
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 10000">
+                <a-text 
+                    value="PHOTO"
+                    position="0 0 0.06"
+                    align="center"
+                    color="white"
+                    width="8">
+                </a-text>
+            </a-box>
+
+            <!-- Company Logo Placeholder -->
+            <a-box 
+                id="logo-placeholder"
+                position="1.5 0.5 0"
+                width="1"
+                height="1"
+                depth="0.1"
+                color="#FF9800"
+                animation="property: scale; to: 1.2 1.2 1.2; direction: alternate; loop: true; dur: 2000">
+                <a-text 
+                    value="MTES"
+                    position="0 0 0.06"
+                    align="center"
+                    color="white"
+                    width="8">
+                </a-text>
+            </a-box>
+
+            <!-- Resume Button -->
+            <a-box 
+                id="resume-button"
+                position="0 0.8 0.2"
+                width="1.5"
+                height="0.3"
+                depth="0.1"
+                color="#FF6B6B"
+                class="interactive">
+                <a-text 
+                    value="📄 Download Resume"
+                    position="0 0 0.06"
+                    align="center"
+                    color="white"
+                    width="6">
+                </a-text>
+            </a-box>
+
+            <!-- Contact Buttons -->
+            <a-cylinder 
+                id="linkedin-button"
+                position="-1 -0.5 0"
+                radius="0.3"
+                height="0.1"
+                color="#0077B5"
+                class="interactive">
+                <a-text 
+                    value="💼 LinkedIn"
+                    position="0 0 0.06"
+                    align="center"
+                    color="white"
+                    width="8">
+                </a-text>
+            </a-cylinder>
+
+            <a-cylinder 
+                id="whatsapp-button"
+                position="0 -0.5 0"
+                radius="0.3"
+                height="0.1"
+                color="#25D366"
+                class="interactive">
+                <a-text 
+                    value="💬 WhatsApp"
+                    position="0 0 0.06"
+                    align="center"
+                    color="white"
+                    width="8">
+                </a-text>
+            </a-cylinder>
+
+            <a-cylinder 
+                id="email-button"
+                position="1 -0.5 0"
+                radius="0.3"
+                height="0.1"
+                color="#EA4335"
+                class="interactive">
+                <a-text 
+                    value="📧 Email"
+                    position="0 0 0.06"
+                    align="center"
+                    color="white"
+                    width="8">
+                </a-text>
+            </a-cylinder>
+
+            <!-- Floating Elements -->
+            <a-sphere 
+                position="0 2.5 0"
+                radius="0.2"
+                color="#FFD700"
+                animation="property: position; to: 0 3 0; direction: alternate; loop: true; dur: 3000">
+            </a-sphere>
+        </a-marker>
+
+        <!-- AR Camera -->
+        <a-entity camera look-controls-enabled="false" arjs-device-orientation-controls="true"></a-entity>
+    </a-scene>
+
+    <!-- Marker Detection Message -->
+    <div id="marker-message" class="marker-message hidden">
+        <div class="marker-content">
+            <h3>🔍 Looking for AR Marker</h3>
+            <p>Point your camera at the Hiro marker</p>
+            <div class="marker-preview">
+                <img src="https://jeromeetienne.github.io/AR.js/data/images/HIRO.jpg" alt="Hiro Marker" class="marker-img">
+            </div>
+            <button id="back-to-qr" class="btn btn-secondary">← Back to QR Code</button>
+        </div>
+    </div>
+
+    <!-- Contact Panel -->
+    <div id="contact-panel" class="contact-panel hidden">
+        <div class="contact-header">
+            <h3>🚀 Quick Connect</h3>
+        </div>
+        <div class="contact-buttons">
+            <button id="email-contact" class="contact-btn">📧 Email</button>
+            <button id="phone-contact" class="contact-btn">📞 Call</button>
+            <button id="linkedin-contact" class="contact-btn">💼 LinkedIn</button>
+            <button id="whatsapp-contact" class="contact-btn">💬 WhatsApp</button>
+            <button id="download-resume" class="contact-btn">📄 Resume</button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
