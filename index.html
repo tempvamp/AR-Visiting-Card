@@ -9,10 +9,9 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <!-- AR Scene loads immediately -->
   <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-    <a-marker preset="hiro" id="marker">
-      <!-- Profile Text -->
+    <!-- Custom QR Marker -->
+    <a-marker type="pattern" url="assets/qr-code.patt" id="marker">
       <a-text id="text-asset"
         value="Ashish M. Muley\nInstrumentation Engineer"
         position="0 1.5 0"
@@ -21,8 +20,6 @@
         width="6"
         visible="false">
       </a-text>
-
-      <!-- Profile Photo -->
       <a-image id="photo-asset"
         src="assets/profile.jpg"
         position="-1 0.8 0"
@@ -30,8 +27,6 @@
         height="1"
         visible="false">
       </a-image>
-
-      <!-- Company Logo -->
       <a-image id="logo-asset"
         src="assets/logo.png"
         position="1 0.8 0"
@@ -39,8 +34,6 @@
         height="1"
         visible="false">
       </a-image>
-
-      <!-- Demo Video -->
       <a-video id="video-asset"
         src="assets/demo.mp4"
         position="0 0 0"
@@ -54,18 +47,6 @@
     </a-marker>
     <a-entity camera></a-entity>
   </a-scene>
-
-  <!-- On‐screen marker preview uses your QR code -->
-  <div id="marker-message" class="marker-message hidden">
-    <div class="marker-content">
-      <h3>🔍 AR Marker</h3>
-      <p>Point your camera at this code</p>
-      <div class="marker-preview">
-        <img src="assets/qr-code.jpg" alt="Your QR Code Marker" class="marker-img"/>
-      </div>
-    </div>
-  </div>
-
   <script src="app.js"></script>
 </body>
 </html>
