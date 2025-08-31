@@ -8,36 +8,35 @@ class ARBusinessCard {
         this.config = {
             // 🔹 PERSONAL INFORMATION (REQUIRED)
             personalInfo: {
-                name: "Ashish Machhindra Muley",                          // Replace with your name
-                title: "Instrumentation Engineer | MTES Pvt. Ltd.",         // Replace with your title
-                email: "ashish.muley@domain.com",                 // Replace with your email
-                phone: "+1-234-567-8900",                       // Replace with your phone (include country code)
-                linkedin: "https://linkedin.com/in", // Replace with your LinkedIn URL
-                instagram: "https://instagram.com",   // Replace with your Instagram URL
-                github: "https://github.com/tempvamp",       // Replace with your GitHub URL
-                portfolio: "https://your-website.com"           // Replace with your portfolio/website URL
+                name: "Ashish Machhindra Muley",                          
+                title: "Instrumentation Engineer | MTES Pvt. Ltd.",         
+                email: "ashish.muley@domain.com",                 
+                phone: "+91-9876543210",                       // Updated to Indian format
+                linkedin: "https://linkedin.com/in/ashishmuley", 
+                instagram: "https://instagram.com/ashishmuley",   
+                github: "https://github.com/tempvamp",       
+                portfolio: "https://ashishmuley.com"           
             },
-
-            // 🔹 ASSETS - UPDATE WITH YOUR GITHUB RAW URLS
+            
+            // 🔹 ASSETS - YOUR GITHUB RAW URLS
             assets: {
-                // Format: https://raw.githubusercontent.com/YOUR-USERNAME/ar-visiting-card/main/assets/FILENAME
-                profileImage: "https://raw.githubusercontent.com/tempvamp/AR-Visiting-Card/main/assets/profile.jpg",              // Path to your profile photo
-                companyLogo: "https://raw.githubusercontent.com/tempvamp/AR-Visiting-Card/main/assets/logo.png",                  // Path to your company logo
-                videoUrl: "https://raw.githubusercontent.com/tempvamp/AR-Visiting-Card/main/assets/demo.mp4",                     // Path to demo video (optional)
-                resumeUrl: "https://raw.githubusercontent.com/tempvamp/AR-Visiting-Card/main/assets/resume.pdf"                   // Path to your resume PDF
+                profileImage: "https://raw.githubusercontent.com/tempvamp/AR-Visiting-Card/main/assets/profile.jpg",              
+                companyLogo: "https://raw.githubusercontent.com/tempvamp/AR-Visiting-Card/main/assets/logo.png",                  
+                videoUrl: "https://raw.githubusercontent.com/tempvamp/AR-Visiting-Card/main/assets/demo.mp4",                     
+                resumeUrl: "https://raw.githubusercontent.com/tempvamp/AR-Visiting-Card/main/assets/resume.pdf"                   
             },
-
+            
             // 🔹 SKILLS SECTION (CUSTOMIZE YOUR SKILLS)
             skills: [
-                {name: "JavaScript", level: 90, color: "#f7df1e"},
-                {name: "Python", level: 85, color: "#3776ab"},
-                {name: "React", level: 80, color: "#61dafb"},
-                {name: "Node.js", level: 75, color: "#339933"},
-                {name: "AR/VR", level: 70, color: "#ff6b6b"},
-                {name: "Firebase", level: 65, color: "#ffca28"}
+                {name: "Instrumentation", level: 95, color: "#00bcd4"},
+                {name: "PLC Programming", level: 90, color: "#ff9800"},
+                {name: "SCADA Systems", level: 85, color: "#4caf50"},
+                {name: "Process Control", level: 88, color: "#9c27b0"},
+                {name: "AutoCAD", level: 80, color: "#f44336"},
+                {name: "Project Management", level: 75, color: "#2196f3"}
             ],
-
-            // 🔹 AR SETTINGS (FINE-TUNE AR EXPERIENCE)
+            
+            // 🔹 AR SETTINGS
             arSettings: {
                 markerSize: 1,
                 animationSpeed: 2000,
@@ -50,14 +49,14 @@ class ARBusinessCard {
                     skillBars: {x: 0, y: -1.5, z: 0}
                 }
             },
-
+            
             // 🔹 OPTIONAL FEATURES
             features: {
-                enableBackgroundAudio: false,    // Set to true to enable background music
-                enableVideoDemo: false,          // Set to true to show video in AR
-                enableSkillBars: true,           // Set to false to hide skill bars
-                enableFloatingCube: true,        // Set to false to hide 3D cube
-                enableParticleEffects: false     // Set to true for particle effects (advanced)
+                enableBackgroundAudio: false,    
+                enableVideoDemo: false,          
+                enableSkillBars: true,           
+                enableFloatingCube: true,        
+                enableParticleEffects: false     
             }
         };
 
@@ -87,37 +86,55 @@ class ARBusinessCard {
     }
 
     // ============================================
-    //    INITIALIZATION
+    //    INITIALIZATION - FIXED VERSION
     // ============================================
 
     async init() {
         try {
             console.log('🚀 Initializing AR Business Card...');
-
+            console.log('📱 Device Info:', {
+                userAgent: navigator.userAgent,
+                isHTTPS: location.protocol === 'https:',
+                hasCamera: !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia),
+                isMobile: this.isMobile()
+            });
+            
             // Cache DOM elements
             this.cacheElements();
-
+            
             // Set up event listeners
             this.setupEventListeners();
-
+            
             // Check device compatibility
             if (!this.checkCompatibility()) {
                 this.showError('Your device does not support AR functionality. Please try on a mobile device with a camera.');
                 return;
             }
-
-            // Request camera permission
-            await this.requestCameraPermission();
-
-            // Initialize AR after a short delay
-            setTimeout(() => {
-                this.initializeAR();
-            }, 2000);
-
+            
+            // Add timeout protection
+            this.addTimeoutProtection();
+            
+            // Request camera permission and initialize AR
+            const permissionGranted = await this.requestCameraPermission();
+            if (permissionGranted) {
+                await this.initializeAR();
+            }
+            
         } catch (error) {
             console.error('❌ Initialization failed:', error);
             this.showError('Failed to initialize AR experience. Please refresh and try again.');
         }
+    }
+
+    addTimeoutProtection() {
+        // Add timeout protection - if AR doesn't initialize in 15 seconds, show error
+        setTimeout(() => {
+            if (!this.state.arInitialized) {
+                console.warn('⚠️ AR initialization timeout');
+                this.hideLoading();
+                this.showError('AR initialization timed out. Please refresh the page and ensure camera permissions are granted.');
+            }
+        }, 15000);
     }
 
     cacheElements() {
@@ -149,149 +166,126 @@ class ARBusinessCard {
             retryBtn.addEventListener('click', () => this.requestCameraPermission());
         }
 
-        // Marker events
-        if (this.elements.marker) {
-            this.elements.marker.addEventListener('markerFound', () => this.onMarkerFound());
-            this.elements.marker.addEventListener('markerLost', () => this.onMarkerLost());
-        }
+        // Marker events - Add delay to ensure AR.js is ready
+        setTimeout(() => {
+            if (this.elements.marker) {
+                this.elements.marker.addEventListener('markerFound', () => this.onMarkerFound());
+                this.elements.marker.addEventListener('markerLost', () => this.onMarkerLost());
+            }
+        }, 2000);
     }
 
     setupContactButtons() {
-        // Email button
-        const emailBtn = document.getElementById('email-btn');
-        if (emailBtn) {
-            emailBtn.addEventListener('click', () => this.openEmail());
-        }
+        const buttons = [
+            { id: 'email-btn', action: () => this.openEmail() },
+            { id: 'phone-btn', action: () => this.openPhone() },
+            { id: 'linkedin-btn', action: () => this.openLinkedIn() },
+            { id: 'instagram-btn', action: () => this.openInstagram() },
+            { id: 'github-btn', action: () => this.openGitHub() },
+            { id: 'resume-download-btn', action: () => this.downloadResume() }
+        ];
 
-        // Phone button
-        const phoneBtn = document.getElementById('phone-btn');
-        if (phoneBtn) {
-            phoneBtn.addEventListener('click', () => this.openPhone());
-        }
-
-        // LinkedIn button
-        const linkedinBtn = document.getElementById('linkedin-btn');
-        if (linkedinBtn) {
-            linkedinBtn.addEventListener('click', () => this.openLinkedIn());
-        }
-
-        // Instagram button
-        const instagramBtn = document.getElementById('instagram-btn');
-        if (instagramBtn) {
-            instagramBtn.addEventListener('click', () => this.openInstagram());
-        }
-
-        // GitHub button
-        const githubBtn = document.getElementById('github-btn');
-        if (githubBtn) {
-            githubBtn.addEventListener('click', () => this.openGitHub());
-        }
-
-        // Resume download button
-        const resumeBtn = document.getElementById('resume-download-btn');
-        if (resumeBtn) {
-            resumeBtn.addEventListener('click', () => this.downloadResume());
-        }
+        buttons.forEach(button => {
+            const element = document.getElementById(button.id);
+            if (element) {
+                element.addEventListener('click', button.action);
+            }
+        });
     }
 
     setupARInteractions() {
-        // Resume button in AR
-        const resumeButton = document.getElementById('resume-button');
-        if (resumeButton) {
-            resumeButton.addEventListener('click', () => this.downloadResume());
-        }
+        const arButtons = [
+            { id: 'resume-button', action: () => this.downloadResume() },
+            { id: 'linkedin-button', action: () => this.openLinkedIn() },
+            { id: 'whatsapp-button', action: () => this.openWhatsApp() },
+            { id: 'portfolio-button', action: () => this.openPortfolio() }
+        ];
 
-        // LinkedIn button in AR
-        const linkedinButton = document.getElementById('linkedin-button');
-        if (linkedinButton) {
-            linkedinButton.addEventListener('click', () => this.openLinkedIn());
-        }
-
-        // WhatsApp button in AR
-        const whatsappButton = document.getElementById('whatsapp-button');
-        if (whatsappButton) {
-            whatsappButton.addEventListener('click', () => this.openWhatsApp());
-        }
-
-        // Portfolio button in AR
-        const portfolioButton = document.getElementById('portfolio-button');
-        if (portfolioButton) {
-            portfolioButton.addEventListener('click', () => this.openPortfolio());
-        }
+        arButtons.forEach(button => {
+            setTimeout(() => {
+                const element = document.getElementById(button.id);
+                if (element) {
+                    element.addEventListener('click', button.action);
+                }
+            }, 3000); // Delay to ensure AR elements are created
+        });
     }
 
     // ============================================
-    //    CAMERA AND COMPATIBILITY
+    //    CAMERA AND COMPATIBILITY - IMPROVED
     // ============================================
 
     checkCompatibility() {
-        // Check for required APIs
         const hasWebGL = !!window.WebGLRenderingContext;
         const hasUserMedia = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
         const hasDeviceOrientation = 'DeviceOrientationEvent' in window;
-
+        const isHTTPS = location.protocol === 'https:';
+        
         console.log('🔍 Compatibility check:', {
             WebGL: hasWebGL,
             UserMedia: hasUserMedia,
-            DeviceOrientation: hasDeviceOrientation
+            DeviceOrientation: hasDeviceOrientation,
+            HTTPS: isHTTPS
         });
-
-        return hasWebGL && hasUserMedia;
+        
+        return hasWebGL && hasUserMedia && isHTTPS;
     }
 
     async requestCameraPermission() {
-    try {
-        console.log('📸 Requesting camera permission...');
-        
-        // More compatible camera request
-        const constraints = {
-            video: { 
-                facingMode: 'environment',
-                width: { min: 640, ideal: 1280, max: 1920 },
-                height: { min: 480, ideal: 720, max: 1080 }
+        try {
+            console.log('📸 Requesting camera permission...');
+            
+            const constraints = {
+                video: { 
+                    facingMode: 'environment',
+                    width: { min: 320, ideal: 640, max: 1280 },
+                    height: { min: 240, ideal: 480, max: 720 }
+                }
+            };
+            
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            
+            this.state.cameraPermission = true;
+            console.log('✅ Camera permission granted');
+            
+            // Stop the test stream immediately
+            stream.getTracks().forEach(track => track.stop());
+            
+            // Hide error message if visible
+            this.hideError();
+            
+            return true;
+            
+        } catch (error) {
+            console.error('❌ Camera permission denied:', error);
+            
+            let errorMessage = 'Camera access is required for the AR experience. ';
+            
+            switch (error.name) {
+                case 'NotAllowedError':
+                    errorMessage += 'Please allow camera permissions and reload the page.';
+                    break;
+                case 'NotFoundError':
+                    errorMessage += 'No camera found on this device.';
+                    break;
+                case 'NotSupportedError':
+                    errorMessage += 'Camera not supported on this browser.';
+                    break;
+                default:
+                    errorMessage += 'Please try again or use a different browser.';
             }
-        };
-        
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        
-        this.state.cameraPermission = true;
-        console.log('✅ Camera permission granted');
-        
-        // Stop the test stream immediately
-        stream.getTracks().forEach(track => track.stop());
-        
-        // Hide error message if visible
-        this.hideError();
-        
-        return true;
-        
-    } catch (error) {
-        console.error('❌ Camera permission denied:', error);
-        
-        // Show specific error message
-        let errorMessage = 'Camera access is required for the AR experience. ';
-        
-        if (error.name === 'NotAllowedError') {
-            errorMessage += 'Please allow camera permissions and reload the page.';
-        } else if (error.name === 'NotFoundError') {
-            errorMessage += 'No camera found on this device.';
-        } else if (error.name === 'NotSupportedError') {
-            errorMessage += 'Camera not supported on this browser.';
-        } else {
-            errorMessage += 'Please try again or use a different browser.';
+            
+            this.showError(errorMessage);
+            this.state.cameraPermission = false;
+            return false;
         }
-        
-        this.showError(errorMessage);
-        this.state.cameraPermission = false;
-        return false;
     }
-}
 
     // ============================================
-    //    AR INITIALIZATION
+    //    AR INITIALIZATION - COMPLETELY FIXED
     // ============================================
 
-    initializeAR() {
+    async initializeAR() {
         if (!this.state.cameraPermission) {
             console.warn('⚠️ Cannot initialize AR without camera permission');
             return;
@@ -299,100 +293,140 @@ class ARBusinessCard {
 
         try {
             console.log('🎯 Initializing AR scene...');
-
+            
+            // Wait for A-Frame and AR.js to be fully loaded
+            await this.waitForARLibraries();
+            
             // Update AR content with personal information
             this.updateARContent();
-
+            
             // Create skill bars if enabled
             if (this.config.features.enableSkillBars) {
                 this.createSkillBars();
             }
-
+            
             // Set up video if enabled
             if (this.config.features.enableVideoDemo) {
                 this.setupVideo();
             }
-
-            // Hide loading screen and show instructions
-            this.hideLoading();
-            this.showInstructions();
-
+            
+            // Mark as initialized
             this.state.arInitialized = true;
             console.log('✅ AR initialized successfully');
-
+            
+            // Hide loading screen and show instructions with delay
+            setTimeout(() => {
+                this.hideLoading();
+                this.showInstructions();
+            }, 1500);
+            
         } catch (error) {
             console.error('❌ AR initialization failed:', error);
             this.showError('Failed to initialize AR. Please refresh and try again.');
         }
     }
 
+    async waitForARLibraries() {
+        return new Promise((resolve, reject) => {
+            let attempts = 0;
+            const maxAttempts = 50; // 10 seconds max wait
+            
+            const checkLibraries = () => {
+                attempts++;
+                
+                if (typeof AFRAME !== 'undefined' && AFRAME.registerComponent) {
+                    console.log('✅ A-Frame loaded');
+                    resolve();
+                } else if (attempts >= maxAttempts) {
+                    reject(new Error('A-Frame failed to load'));
+                } else {
+                    setTimeout(checkLibraries, 200);
+                }
+            };
+            
+            checkLibraries();
+        });
+    }
+
     updateARContent() {
-        // Update profile text
-        const profileText = document.getElementById('profile-text');
-        if (profileText) {
-            const info = this.config.personalInfo;
-            profileText.setAttribute('value', `${info.name}\n${info.title}\n${info.email}`);
-        }
+        try {
+            // Update profile text
+            const profileText = document.getElementById('profile-text');
+            if (profileText) {
+                const info = this.config.personalInfo;
+                profileText.setAttribute('value', `${info.name}\\n${info.title}\\n${info.email}`);
+            }
 
-        // Update profile image
-        const profileImg = document.getElementById('profile-img');
-        if (profileImg && this.config.assets.profileImage) {
-            profileImg.setAttribute('src', this.config.assets.profileImage);
-        }
+            // Update profile image
+            const profileImg = document.getElementById('profile-img');
+            if (profileImg && this.config.assets.profileImage) {
+                profileImg.setAttribute('src', this.config.assets.profileImage);
+            }
 
-        // Update company logo
-        const logoImg = document.getElementById('company-logo-img');
-        if (logoImg && this.config.assets.companyLogo) {
-            logoImg.setAttribute('src', this.config.assets.companyLogo);
+            // Update company logo
+            const logoImg = document.getElementById('company-logo-img');
+            if (logoImg && this.config.assets.companyLogo) {
+                logoImg.setAttribute('src', this.config.assets.companyLogo);
+            }
+        } catch (error) {
+            console.warn('⚠️ Error updating AR content:', error);
         }
     }
 
     createSkillBars() {
-        const skillBarsContainer = document.getElementById('skill-bars');
-        if (!skillBarsContainer) return;
+        try {
+            const skillBarsContainer = document.getElementById('skill-bars');
+            if (!skillBarsContainer) return;
 
-        // Clear existing skill bars
-        skillBarsContainer.innerHTML = '';
+            // Clear existing skill bars
+            skillBarsContainer.innerHTML = '';
 
-        this.config.skills.forEach((skill, index) => {
-            const yPosition = -0.3 * index;
-
-            // Create skill background bar
-            const backgroundBar = document.createElement('a-box');
-            backgroundBar.setAttribute('position', `0 ${yPosition} 0`);
-            backgroundBar.setAttribute('width', '2');
-            backgroundBar.setAttribute('height', '0.1');
-            backgroundBar.setAttribute('depth', '0.05');
-            backgroundBar.setAttribute('color', '#333333');
-            skillBarsContainer.appendChild(backgroundBar);
-
-            // Create skill progress bar
-            const progressBar = document.createElement('a-box');
-            const skillWidth = (skill.level / 100) * 2;
-            progressBar.setAttribute('position', `${-1 + skillWidth/2} ${yPosition} 0.03`);
-            progressBar.setAttribute('width', skillWidth);
-            progressBar.setAttribute('height', '0.08');
-            progressBar.setAttribute('depth', '0.02');
-            progressBar.setAttribute('color', skill.color);
-            progressBar.setAttribute('animation', `property: width; to: ${skillWidth}; dur: 2000; delay: ${index * 200}; easing: easeOutQuad`);
-            skillBarsContainer.appendChild(progressBar);
-
-            // Create skill label
-            const label = document.createElement('a-text');
-            label.setAttribute('position', `-1.2 ${yPosition + 0.1} 0`);
-            label.setAttribute('value', `${skill.name} ${skill.level}%`);
-            label.setAttribute('color', '#ffffff');
-            label.setAttribute('width', '6');
-            label.setAttribute('align', 'left');
-            skillBarsContainer.appendChild(label);
-        });
+            this.config.skills.forEach((skill, index) => {
+                const yPosition = -0.3 * index;
+                
+                // Create skill background bar
+                const backgroundBar = document.createElement('a-box');
+                backgroundBar.setAttribute('position', `0 ${yPosition} 0`);
+                backgroundBar.setAttribute('width', '2');
+                backgroundBar.setAttribute('height', '0.1');
+                backgroundBar.setAttribute('depth', '0.05');
+                backgroundBar.setAttribute('color', '#333333');
+                skillBarsContainer.appendChild(backgroundBar);
+                
+                // Create skill progress bar
+                const progressBar = document.createElement('a-box');
+                const skillWidth = (skill.level / 100) * 2;
+                progressBar.setAttribute('position', `${-1 + skillWidth/2} ${yPosition} 0.03`);
+                progressBar.setAttribute('width', skillWidth);
+                progressBar.setAttribute('height', '0.08');
+                progressBar.setAttribute('depth', '0.02');
+                progressBar.setAttribute('color', skill.color);
+                progressBar.setAttribute('animation', `property: width; to: ${skillWidth}; dur: 2000; delay: ${index * 200}; easing: easeOutQuad`);
+                skillBarsContainer.appendChild(progressBar);
+                
+                // Create skill label
+                const label = document.createElement('a-text');
+                label.setAttribute('position', `-1.2 ${yPosition + 0.1} 0`);
+                label.setAttribute('value', `${skill.name} ${skill.level}%`);
+                label.setAttribute('color', '#ffffff');
+                label.setAttribute('width', '6');
+                label.setAttribute('align', 'left');
+                skillBarsContainer.appendChild(label);
+            });
+        } catch (error) {
+            console.warn('⚠️ Error creating skill bars:', error);
+        }
     }
 
     setupVideo() {
-        const video = document.getElementById('demo-video');
-        if (video && this.config.assets.videoUrl) {
-            video.setAttribute('src', this.config.assets.videoUrl);
-            video.setAttribute('visible', 'true');
+        try {
+            const video = document.getElementById('demo-video');
+            if (video && this.config.assets.videoUrl) {
+                video.setAttribute('src', this.config.assets.videoUrl);
+                video.setAttribute('visible', 'true');
+            }
+        } catch (error) {
+            console.warn('⚠️ Error setting up video:', error);
         }
     }
 
@@ -403,38 +437,28 @@ class ARBusinessCard {
     onMarkerFound() {
         console.log('🎯 AR Marker detected!');
         this.state.markerVisible = true;
-
-        // Hide marker message
         this.hideMarkerMessage();
-
-        // Start background audio if enabled
+        
         if (this.config.features.enableBackgroundAudio) {
             this.startBackgroundAudio();
         }
-
-        // Add visual feedback
+        
         this.addMarkerFoundEffects();
     }
 
     onMarkerLost() {
         console.log('👻 AR Marker lost');
         this.state.markerVisible = false;
-
-        // Show marker message
         this.showMarkerMessage();
-
-        // Stop background audio
         this.stopBackgroundAudio();
     }
 
     addMarkerFoundEffects() {
-        // Add pulse effect to floating cube
         const cube = document.getElementById('floating-cube');
         if (cube) {
             cube.classList.add('ar-pulse');
         }
-
-        // Add glow effect to interactive elements
+        
         const interactiveElements = document.querySelectorAll('.interactive');
         interactiveElements.forEach(element => {
             element.classList.add('ar-glow');
@@ -487,10 +511,9 @@ class ARBusinessCard {
     }
 
     downloadResume() {
-        // Create a temporary link to trigger download
         const link = document.createElement('a');
         link.href = this.config.assets.resumeUrl;
-        link.download = `${this.config.personalInfo.name.replace(/\s+/g, '_')}_Resume.pdf`;
+        link.download = `${this.config.personalInfo.name.replace(/\\s+/g, '_')}_Resume.pdf`;
         link.target = '_blank';
         document.body.appendChild(link);
         link.click();
@@ -559,6 +582,8 @@ class ARBusinessCard {
     }
 
     showError(message) {
+        this.hideLoading(); // Hide loading screen when showing error
+        
         if (this.elements.errorMessage) {
             const errorContent = this.elements.errorMessage.querySelector('.error-content p');
             if (errorContent) {
@@ -573,18 +598,35 @@ class ARBusinessCard {
             this.elements.errorMessage.classList.add('hidden');
         }
     }
+
+    // ============================================
+    //    UTILITY FUNCTIONS
+    // ============================================
+
+    isMobile() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    isIOS() {
+        return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    }
 }
 
 // ============================================
-//    INITIALIZE APPLICATION
+//    INITIALIZE APPLICATION - IMPROVED
 // ============================================
 
-// Wait for DOM to be fully loaded
+// Wait for DOM and libraries to be fully loaded
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🌟 DOM loaded, starting AR Business Card...');
-
-    // Initialize the AR Business Card application
-    window.arBusinessCard = new ARBusinessCard();
+    
+    // Add additional delay for mobile devices
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const delay = isMobile ? 1000 : 500;
+    
+    setTimeout(() => {
+        window.arBusinessCard = new ARBusinessCard();
+    }, delay);
 });
 
 // Handle page visibility changes
@@ -601,12 +643,13 @@ document.addEventListener('visibilitychange', () => {
 // Handle orientation changes
 window.addEventListener('orientationchange', () => {
     if (window.arBusinessCard && window.arBusinessCard.elements.arScene) {
-        // Refresh AR scene after orientation change
         setTimeout(() => {
-            window.arBusinessCard.elements.arScene.renderer.setSize(
-                window.innerWidth,
-                window.innerHeight
-            );
+            if (window.arBusinessCard.elements.arScene.renderer) {
+                window.arBusinessCard.elements.arScene.renderer.setSize(
+                    window.innerWidth,
+                    window.innerHeight
+                );
+            }
         }, 500);
     }
 });
@@ -619,78 +662,11 @@ window.addEventListener('error', (event) => {
     }
 });
 
-// ============================================
-//    UTILITY FUNCTIONS
-// ============================================
-
-// Detect if device is iOS
-function isIOS() {
-    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-}
-
-// Detect if device is mobile
-function isMobile() {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
-
 // Log device information for debugging
 console.log('📱 Device Info:', {
     userAgent: navigator.userAgent,
     platform: navigator.platform,
-    isIOS: isIOS(),
-    isMobile: isMobile(),
     screenSize: `${screen.width}x${screen.height}`,
-    viewportSize: `${window.innerWidth}x${window.innerHeight}`
+    viewportSize: `${window.innerWidth}x${window.innerHeight}`,
+    isHTTPS: location.protocol === 'https:'
 });
-
-// ============================================
-//    INSTRUCTIONS FOR CUSTOMIZATION
-// ============================================
-
-/*
-🎯 CUSTOMIZATION GUIDE:
-
-1. PERSONAL INFORMATION (Lines 13-22):
-   - Update name, title, email, phone, and social media links
-   - Use full URLs for social media profiles
-
-2. ASSET PATHS (Lines 25-30):
-   - After uploading to GitHub, update these paths with your raw GitHub URLs
-   - Format: https://raw.githubusercontent.com/USERNAME/REPO/main/assets/FILENAME
-
-3. SKILLS (Lines 33-40):
-   - Add/remove/modify skills and proficiency levels
-   - Change colors using hex color codes
-   - Adjust skill levels (0-100)
-
-4. AR SETTINGS (Lines 43-53):
-   - Fine-tune AR object positions in 3D space
-   - Adjust animation speeds and marker settings
-
-5. OPTIONAL FEATURES (Lines 56-62):
-   - Enable/disable background audio, video, skill bars, etc.
-   - Set to true/false based on your preferences
-
-6. GITHUB SETUP:
-   - Create repository: your-username/ar-visiting-card
-   - Upload files to: index.html, style.css, app.js
-   - Upload assets to: assets/ folder
-   - Enable GitHub Pages in repository settings
-   - Your site will be live at: https://your-username.github.io/ar-visiting-card
-
-🔧 TESTING:
-   - Test locally with a local server (python -m http.server or Live Server)
-   - Test on mobile devices for camera functionality
-   - Print Hiro marker for AR testing
-   - Generate QR code pointing to your GitHub Pages URL
-
-📞 SUPPORT:
-   - Check browser console for error messages
-   - Ensure HTTPS is enabled (automatic on GitHub Pages)
-   - Verify camera permissions are granted
-   - Test with good lighting for marker detection
-
-Happy coding! 🚀
-
-*/
-
