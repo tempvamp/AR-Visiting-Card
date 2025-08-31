@@ -1,23 +1,23 @@
 (async () => {
-  // Request camera permission
   try {
     await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-  } catch (error) {
-    alert('🚨 Camera access is required. Please allow and reload.');
+  } catch {
+    alert('⚠️ Please allow camera access and reload.');
     return;
   }
 
   const marker = document.getElementById('marker');
 
   marker.addEventListener('markerFound', () => {
-    const sequence = [
+    const elements = [
       'name-entity',
       'video-entity',
       'logo-entity',
       'photo-entity',
     ];
 
-    sequence.forEach((id, i) => {
+    // Sequential pop-in animation
+    elements.forEach((id, i) => {
       const el = document.getElementById(id);
       setTimeout(() => {
         el.setAttribute('visible', 'true');
@@ -25,40 +25,29 @@
       }, i * 1200 + 500);
     });
 
-    // Enable video playback on some mobile devices (manual play requirement)
-    const videoEl = document.querySelector('#video-asset');
-    if (videoEl) {
-      videoEl.play().catch(() => {
-        console.log('⚠️ Unable to autoplay video; user interaction required.');
+    // Enable video playback
+    const video = document.querySelector('#video-asset');
+    if (video) {
+      video.play().catch(() => {
+        console.log('⚠️ Video autoplay blocked, user interaction needed.');
       });
     }
 
-    // Add clickable behavior to open links (optional)
-    setupClickableLinks();
+    // Add simple tap handlers for links/download
+    addTapListeners();
   });
 
-  function setupClickableLinks() {
-    // Name click opens LinkedIn
-    const nameEntity = document.getElementById('name-entity');
-    nameEntity.addEventListener('click', () => {
+  function addTapListeners() {
+    document.getElementById('name-entity')?.addEventListener('click', () => {
       window.open('https://linkedin.com/in/ashishmuley', '_blank');
     });
-
-    // Logo click opens company website
-    const logoEntity = document.getElementById('logo-entity');
-    logoEntity.addEventListener('click', () => {
+    document.getElementById('logo-entity')?.addEventListener('click', () => {
       window.open('https://mtes.com', '_blank');
     });
-
-    // Profile photo click downloads resume
-    const photoEntity = document.getElementById('photo-entity');
-    photoEntity.addEventListener('click', () => {
+    document.getElementById('photo-entity')?.addEventListener('click', () => {
       window.open('assets/resume.pdf', '_blank');
     });
-
-    // Video click opens portfolio (example)
-    const videoEntity = document.getElementById('video-entity');
-    videoEntity.addEventListener('click', () => {
+    document.getElementById('video-entity')?.addEventListener('click', () => {
       window.open('https://ashishmuley.com', '_blank');
     });
   }
