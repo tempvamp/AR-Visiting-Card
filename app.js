@@ -21,10 +21,10 @@ class ARBusinessCard {
             // 🔹 ASSETS - UPDATE WITH YOUR GITHUB RAW URLS
             assets: {
                 // Format: https://raw.githubusercontent.com/YOUR-USERNAME/ar-visiting-card/main/assets/FILENAME
-                profileImage: "assets/profile.jpg",              // Path to your profile photo
-                companyLogo: "assets/logo.png",                  // Path to your company logo
-                videoUrl: "assets/demo.mp4",                     // Path to demo video (optional)
-                resumeUrl: "assets/resume.pdf"                   // Path to your resume PDF
+                profileImage: "https://raw.githubusercontent.com/tempvamp/AR-Visiting-Card/main/assets/profile.jpg",              // Path to your profile photo
+                companyLogo: "https://raw.githubusercontent.com/tempvamp/AR-Visiting-Card/main/assets/logo.png",                  // Path to your company logo
+                videoUrl: "https://raw.githubusercontent.com/tempvamp/AR-Visiting-Card/main/assets/demo.mp4",                     // Path to demo video (optional)
+                resumeUrl: "https://raw.githubusercontent.com/tempvamp/AR-Visiting-Card/main/assets/resume.pdf"                   // Path to your resume PDF
             },
 
             // 🔹 SKILLS SECTION (CUSTOMIZE YOUR SKILLS)
@@ -671,4 +671,5 @@ console.log('📱 Device Info:', {
    - Test with good lighting for marker detection
 
 Happy coding! 🚀
+
 */
