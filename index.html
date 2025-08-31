@@ -9,24 +9,26 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+  <!-- AR Scene -->
   <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-    <!-- QR as marker -->
+    <!-- Your QR code pattern -->
     <a-marker type="pattern" url="assets/qr-code.patt" id="marker">
       
-      <!-- Above: Name Text -->
+      <!-- Above QR: Name -->
       <a-text id="text-asset"
         value="Ashish M. Muley"
+        position="0 1.2 0"
         align="center"
         color="#00D4FF"
-        position="0 2 0"
-        width="4"
+        width="2"
         visible="false">
       </a-text>
       
-      <!-- Left: Demo Video -->
+      <!-- Left of QR: Demo Video -->
       <a-video id="video-asset"
         src="assets/demo.mp4"
-        position="-1.5 0.5 0"
+        position="-1.2 0 0"
+        rotation="0 0 0"
         width="1"
         height="0.6"
         autoplay="true"
@@ -34,25 +36,22 @@
         muted="true"
         visible="false">
       </a-video>
-
-      <!-- Center QR (invisible plane) -->
-      <a-plane position="0 0 0" rotation="-90 0 0" width="1" height="1"
-        material="transparent: true; opacity: 0;">
-      </a-plane>
-
-      <!-- Right: Logo -->
+      
+      <!-- Right of QR: Logo -->
       <a-image id="logo-asset"
         src="assets/logo.png"
-        position="1.5 0.5 0"
-        width="1"
-        height="1"
+        position="1.2 0 0"
+        rotation="0 0 0"
+        width="0.8"
+        height="0.8"
         visible="false">
       </a-image>
-
-      <!-- Below: Profile Photo -->
+      
+      <!-- Below QR: Profile Photo -->
       <a-image id="photo-asset"
         src="assets/profile.jpg"
-        position="0 -1 0"
+        position="0 -1.2 0"
+        rotation="0 0 0"
         width="0.8"
         height="0.8"
         visible="false">
@@ -61,7 +60,6 @@
     </a-marker>
     <a-entity camera></a-entity>
   </a-scene>
-
   <script src="app.js"></script>
 </body>
 </html>
