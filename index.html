@@ -10,6 +10,12 @@
 </head>
 <body>
   <!-- AR Scene loads immediately -->
+  <!-- QR Landing Section -->
+<div id="landing" class="landing">
+  <h1>Scan to View My AR Business Card</h1>
+  <img src="assets/qr.png" alt="Scan to open AR Business Card" class="qr-img" />
+  <p>Or open directly <a href="https://tempvamp.github.io/AR-Visiting-Card" target="_blank">here</a>.</p>
+</div>
   <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
     <a-marker preset="hiro">
       <!-- Profile Text -->
@@ -55,3 +61,4 @@
   <script src="app.js"></script>
 </body>
 </html>
+
