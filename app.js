@@ -7,13 +7,19 @@
     return;
   }
 
-  // 2) When marker is detected, pop in each asset
+  // 2) On marker detection, pop in text, video, logo, photo in sequence
   const marker = document.getElementById('marker');
   marker.addEventListener('markerFound', () => {
-    ['text-asset','photo-asset','logo-asset','video-asset'].forEach((id, idx) => {
+    const sequence = [
+      'text-asset',
+      'video-asset',
+      'logo-asset',
+      'photo-asset'
+    ];
+    sequence.forEach((id, idx) => {
       const el = document.getElementById(id);
       setTimeout(() => {
-        el.setAttribute('visible','true');
+        el.setAttribute('visible', 'true');
         el.classList.add('pop-in');
       }, idx * 1000 + 500);
     });
