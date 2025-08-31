@@ -240,32 +240,52 @@ class ARBusinessCard {
     }
 
     async requestCameraPermission() {
-        try {
-            console.log('📸 Requesting camera permission...');
-
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: { 
-                    facingMode: 'environment',
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                }
-            });
-
-            this.state.cameraPermission = true;
-            console.log('✅ Camera permission granted');
-
-            // Stop the test stream
-            stream.getTracks().forEach(track => track.stop());
-
-            // Hide error message if visible
-            this.hideError();
-
-        } catch (error) {
-            console.error('❌ Camera permission denied:', error);
-            this.showError('Camera access is required for the AR experience. Please allow camera permissions and try again.');
-            this.state.cameraPermission = false;
+    try {
+        console.log('📸 Requesting camera permission...');
+        
+        // More compatible camera request
+        const constraints = {
+            video: { 
+                facingMode: 'environment',
+                width: { min: 640, ideal: 1280, max: 1920 },
+                height: { min: 480, ideal: 720, max: 1080 }
+            }
+        };
+        
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        
+        this.state.cameraPermission = true;
+        console.log('✅ Camera permission granted');
+        
+        // Stop the test stream immediately
+        stream.getTracks().forEach(track => track.stop());
+        
+        // Hide error message if visible
+        this.hideError();
+        
+        return true;
+        
+    } catch (error) {
+        console.error('❌ Camera permission denied:', error);
+        
+        // Show specific error message
+        let errorMessage = 'Camera access is required for the AR experience. ';
+        
+        if (error.name === 'NotAllowedError') {
+            errorMessage += 'Please allow camera permissions and reload the page.';
+        } else if (error.name === 'NotFoundError') {
+            errorMessage += 'No camera found on this device.';
+        } else if (error.name === 'NotSupportedError') {
+            errorMessage += 'Camera not supported on this browser.';
+        } else {
+            errorMessage += 'Please try again or use a different browser.';
         }
+        
+        this.showError(errorMessage);
+        this.state.cameraPermission = false;
+        return false;
     }
+}
 
     // ============================================
     //    AR INITIALIZATION
@@ -673,3 +693,4 @@ console.log('📱 Device Info:', {
 Happy coding! 🚀
 
 */
+
